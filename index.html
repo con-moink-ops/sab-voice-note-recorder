@@ -1,168 +1,199 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.6">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8">
+  <title>SAB Voice Note Recorder</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 24px;
+      max-width: 520px;
+      margin: auto;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 10px 16px;
+      margin: 8px 4px 8px 0;
+      cursor: pointer;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    #status {
+      margin-top: 16px;
+      font-weight: bold;
+    }
+
+    iframe {
+      display: none;
+    }
   </style>
 </head>
+
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;SAB Voice Note Recorder&lt;/title&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>font-family: Arial, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>padding: 24px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>max-width: 520px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin: auto;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>button {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>font-size: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>padding: 10px 16px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin: 8px 4px 8px 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>audio {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin-top: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>#status {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>margin-top: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>font-weight: bold;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>iframe {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/head&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;SAB Voice Note Recorder&lt;/h2&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;&lt;b&gt;Episode:&lt;/b&gt; &lt;span id="episodeText"&gt;&lt;/span&gt;&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="startRecording()"&gt;🎤 Start Recording&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="stopRecording()"&gt;⏹ Stop Recording&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="uploadRecording()"&gt;⬆ Upload Note&lt;/button&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;audio id="audioPlayback" controls&gt;&lt;/audio&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="status"&gt;Ready.&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;form id="uploadForm" method="POST" target="hiddenFrame"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;input type="hidden" name="episode" id="episodeInput"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;input type="hidden" name="row" id="rowInput"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;input type="hidden" name="audio" id="audioInput"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/form&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;iframe name="hiddenFrame" id="hiddenFrame"&gt;&lt;/iframe&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let mediaRecorder;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let audioChunks = [];</p>
-<p class="p1"><span class="Apple-converted-space">      </span>let audioBlob;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const params = new URLSearchParams(window.location.search);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const row = params.get("row");</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const episode = params.get("episode");</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const apiUrl = params.get("api");</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById("episodeText").innerText = episode || "Not found";</p>
-<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById("episodeInput").value = episode || "";</p>
-<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById("rowInput").value = row || "";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (!row || !episode || !apiUrl) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById("status").innerText =</p>
-<p class="p1"><span class="Apple-converted-space">          </span>"Missing row, episode, or API URL. Please open this from the Google Sheet.";</p>
-<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById("uploadForm").action = apiUrl;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>async function startRecording() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("status").innerText =</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Requesting microphone permission...";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>const stream = await navigator.mediaDevices.getUserMedia({</p>
-<p class="p1"><span class="Apple-converted-space">            </span>audio: true</p>
-<p class="p1"><span class="Apple-converted-space">          </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>audioChunks = [];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>mediaRecorder = new MediaRecorder(stream);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>mediaRecorder.ondataavailable = function(event) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>audioChunks.push(event.data);</p>
-<p class="p1"><span class="Apple-converted-space">          </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>mediaRecorder.onstop = function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>audioBlob = new Blob(audioChunks, {</p>
-<p class="p1"><span class="Apple-converted-space">              </span>type: "audio/webm"</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const audioUrl = URL.createObjectURL(audioBlob);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById("audioPlayback").src = audioUrl;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById("status").innerText =</p>
-<p class="p1"><span class="Apple-converted-space">              </span>"Recording stopped. Please preview and upload.";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>mediaRecorder.start();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("status").innerText = "Recording...";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} catch (error) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("status").innerText =</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"ERROR: " + error.name + " - " + error.message;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function stopRecording() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (mediaRecorder &amp;&amp; mediaRecorder.state !== "inactive") {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>mediaRecorder.stop();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>function uploadRecording() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (!audioBlob) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("status").innerText =</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Please record something first.";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById("status").innerText = "Preparing upload...";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const reader = new FileReader();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>reader.onloadend = function() {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("audioInput").value = reader.result;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("status").innerText =</p>
-<p class="p1"><span class="Apple-converted-space">            </span>"Uploading... Please wait.";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("uploadForm").submit();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">          </span>setTimeout(function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById("status").innerText =</p>
-<p class="p1"><span class="Apple-converted-space">              </span>"Upload submitted. Check Column L in the SAB sheet. It should change to 🎤 Play Note.";</p>
-<p class="p1"><span class="Apple-converted-space">          </span>}, 3000);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>reader.readAsDataURL(audioBlob);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+<h2>SAB Voice Note Recorder</h2>
+
+<p>
+  <b>Episode:</b>
+  <span id="episodeText">Not found</span>
+</p>
+
+<button onclick="startRecording()">🎤 Start Recording</button>
+<button onclick="stopRecording()">⏹ Stop Recording</button>
+<button onclick="uploadRecording()">⬆ Upload Note</button>
+
+<br><br>
+
+<audio id="audioPlayback" controls></audio>
+
+<div id="status">Ready.</div>
+
+<form id="uploadForm" method="POST" target="hiddenFrame">
+  <input type="hidden" name="episode" id="episodeInput">
+  <input type="hidden" name="row" id="rowInput">
+  <input type="hidden" name="audio" id="audioInput">
+</form>
+
+<iframe name="hiddenFrame" id="hiddenFrame"></iframe>
+
+<script>
+
+let mediaRecorder;
+let audioChunks = [];
+let audioBlob;
+
+const params = new URLSearchParams(window.location.search);
+
+const row = params.get("row");
+const episode = params.get("episode");
+const apiUrl = params.get("api");
+
+document.getElementById("episodeText").innerText =
+  episode || "Not found";
+
+document.getElementById("episodeInput").value =
+  episode || "";
+
+document.getElementById("rowInput").value =
+  row || "";
+
+if (apiUrl) {
+  document.getElementById("uploadForm").action = apiUrl;
+}
+
+async function startRecording() {
+
+  try {
+
+    document.getElementById("status").innerText =
+      "Requesting microphone permission...";
+
+    const stream =
+      await navigator.mediaDevices.getUserMedia({
+        audio: true
+      });
+
+    audioChunks = [];
+
+    mediaRecorder =
+      new MediaRecorder(stream);
+
+    mediaRecorder.ondataavailable = function(event) {
+      audioChunks.push(event.data);
+    };
+
+    mediaRecorder.onstop = function() {
+
+      audioBlob = new Blob(
+        audioChunks,
+        { type: "audio/webm" }
+      );
+
+      const audioUrl =
+        URL.createObjectURL(audioBlob);
+
+      document.getElementById(
+        "audioPlayback"
+      ).src = audioUrl;
+
+      document.getElementById("status").innerText =
+        "Recording stopped. You can upload now.";
+    };
+
+    mediaRecorder.start();
+
+    document.getElementById("status").innerText =
+      "Recording...";
+  }
+
+  catch(error) {
+
+    document.getElementById("status").innerText =
+      "ERROR: " +
+      error.name +
+      " - " +
+      error.message;
+  }
+}
+
+function stopRecording() {
+
+  if (
+    mediaRecorder &&
+    mediaRecorder.state !== "inactive"
+  ) {
+    mediaRecorder.stop();
+  }
+}
+
+function uploadRecording() {
+
+  if (!audioBlob) {
+
+    document.getElementById("status").innerText =
+      "Please record something first.";
+
+    return;
+  }
+
+  document.getElementById("status").innerText =
+    "Preparing upload...";
+
+  const reader =
+    new FileReader();
+
+  reader.onloadend = function() {
+
+    document.getElementById(
+      "audioInput"
+    ).value = reader.result;
+
+    document.getElementById("status").innerText =
+      "Uploading...";
+
+    document.getElementById(
+      "uploadForm"
+    ).submit();
+
+    setTimeout(function() {
+
+      document.getElementById("status").innerText =
+        "Upload submitted. Check the SAB sheet.";
+
+    }, 3000);
+
+  };
+
+  reader.readAsDataURL(audioBlob);
+}
+
+</script>
+
 </body>
 </html>
