@@ -28,10 +28,6 @@
       margin-top: 16px;
       font-weight: bold;
     }
-
-    iframe {
-      display: none;
-    }
   </style>
 </head>
 
@@ -54,16 +50,13 @@
 
 <div id="status">Ready.</div>
 
-<form id="uploadForm" method="POST" target="hiddenFrame">
+<form id="uploadForm" method="POST">
   <input type="hidden" name="episode" id="episodeInput">
   <input type="hidden" name="row" id="rowInput">
   <input type="hidden" name="audio" id="audioInput">
 </form>
 
-<iframe name="hiddenFrame" id="hiddenFrame"></iframe>
-
 <script>
-
 let mediaRecorder;
 let audioChunks = [];
 let audioBlob;
@@ -74,125 +67,90 @@ const row = params.get("row");
 const episode = params.get("episode");
 const apiUrl = params.get("api");
 
-document.getElementById("episodeText").innerText =
-  episode || "Not found";
-
-document.getElementById("episodeInput").value =
-  episode || "";
-
-document.getElementById("rowInput").value =
-  row || "";
+document.getElementById("episodeText").innerText = episode || "Not found";
+document.getElementById("episodeInput").value = episode || "";
+document.getElementById("rowInput").value = row || "";
 
 if (apiUrl) {
   document.getElementById("uploadForm").action = apiUrl;
+} else {
+  document.getElementById("status").innerText =
+    "Missing API URL. Please open this recorder from the Google Sheet.";
 }
 
 async function startRecording() {
-
   try {
-
     document.getElementById("status").innerText =
       "Requesting microphone permission...";
 
-    const stream =
-      await navigator.mediaDevices.getUserMedia({
-        audio: true
-      });
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
 
     audioChunks = [];
 
-    mediaRecorder =
-      new MediaRecorder(stream);
+    mediaRecorder = new MediaRecorder(stream);
 
     mediaRecorder.ondataavailable = function(event) {
       audioChunks.push(event.data);
     };
 
     mediaRecorder.onstop = function() {
+      audioBlob = new Blob(audioChunks, {
+        type: "audio/webm"
+      });
 
-      audioBlob = new Blob(
-        audioChunks,
-        { type: "audio/webm" }
-      );
-
-      const audioUrl =
-        URL.createObjectURL(audioBlob);
-
-      document.getElementById(
-        "audioPlayback"
-      ).src = audioUrl;
+      const audioUrl = URL.createObjectURL(audioBlob);
+      document.getElementById("audioPlayback").src = audioUrl;
 
       document.getElementById("status").innerText =
-        "Recording stopped. You can upload now.";
+        "Recording stopped. Preview it, then click Upload Note.";
     };
 
     mediaRecorder.start();
 
+    document.getElementById("status").innerText = "Recording...";
+  } catch (error) {
     document.getElementById("status").innerText =
-      "Recording...";
-  }
-
-  catch(error) {
-
-    document.getElementById("status").innerText =
-      "ERROR: " +
-      error.name +
-      " - " +
-      error.message;
+      "ERROR: " + error.name + " - " + error.message;
   }
 }
 
 function stopRecording() {
-
-  if (
-    mediaRecorder &&
-    mediaRecorder.state !== "inactive"
-  ) {
+  if (mediaRecorder && mediaRecorder.state !== "inactive") {
     mediaRecorder.stop();
   }
 }
 
 function uploadRecording() {
-
   if (!audioBlob) {
-
     document.getElementById("status").innerText =
       "Please record something first.";
+    return;
+  }
 
+  if (!apiUrl) {
+    document.getElementById("status").innerText =
+      "Missing API URL. Please open this recorder from the Google Sheet.";
     return;
   }
 
   document.getElementById("status").innerText =
     "Preparing upload...";
 
-  const reader =
-    new FileReader();
+  const reader = new FileReader();
 
   reader.onloadend = function() {
-
-    document.getElementById(
-      "audioInput"
-    ).value = reader.result;
+    document.getElementById("audioInput").value = reader.result;
 
     document.getElementById("status").innerText =
       "Uploading...";
 
-    document.getElementById(
-      "uploadForm"
-    ).submit();
-
-    setTimeout(function() {
-
-      document.getElementById("status").innerText =
-        "Upload submitted. Check the SAB sheet.";
-
-    }, 3000);
-
+    document.getElementById("uploadForm").submit();
   };
 
   reader.readAsDataURL(audioBlob);
 }
-
 </script>
 
 </body>
